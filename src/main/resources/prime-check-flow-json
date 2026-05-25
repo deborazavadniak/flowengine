@@ -1,0 +1,122 @@
+{
+  "id": "prime-check",
+  "name": "Verificação de Número Primo",
+  "startBlockId": "b1",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "input",
+      "config": {
+        "inputKey": "number",
+        "outputVar": "n"
+      },
+      "routes": {
+        "next": "b2"
+      }
+    },
+    {
+      "id": "b2",
+      "type": "condition",
+      "config": {
+        "left": "n",
+        "operator": "<=",
+        "right": "1"
+      },
+      "routes": {
+        "true": "b-not-prime",
+        "false": "b3"
+      }
+    },
+    {
+      "id": "b3",
+      "type": "condition",
+      "config": {
+        "left": "n",
+        "operator": "==",
+        "right": "2"
+      },
+      "routes": {
+        "true": "b-prime",
+        "false": "b4"
+      }
+    },
+    {
+      "id": "b4",
+      "type": "condition",
+      "config": {
+        "left": "n",
+        "operator": "%",
+        "right": "2"
+      },
+      "routes": {
+        "true": "b-not-prime",
+        "false": "b5"
+      }
+    },
+    {
+      "id": "b5",
+      "type": "set_variable",
+      "config": {
+        "key": "divisor",
+        "value": "3"
+      },
+      "routes": {
+        "next": "b6"
+      }
+    },
+    {
+      "id": "b6",
+      "type": "condition",
+      "config": {
+        "left": "divisor",
+        "operator": "pow2_lte",
+        "right": "n"
+      },
+      "routes": {
+        "true": "b7",
+        "false": "b-prime"
+      }
+    },
+    {
+      "id": "b7",
+      "type": "condition",
+      "config": {
+        "left": "n",
+        "operator": "%",
+        "right": "divisor"
+      },
+      "routes": {
+        "true": "b-not-prime",
+        "false": "b8"
+      }
+    },
+    {
+      "id": "b8",
+      "type": "math",
+      "config": {
+        "target": "divisor",
+        "operation": "+",
+        "operand": "2"
+      },
+      "routes": {
+        "next": "b6"
+      }
+    },
+    {
+      "id": "b-prime",
+      "type": "output",
+      "config": {
+        "value": "É primo"
+      },
+      "routes": {}
+    },
+    {
+      "id": "b-not-prime",
+      "type": "output",
+      "config": {
+        "value": "Não é primo"
+      },
+      "routes": {}
+    }
+  ]
+}

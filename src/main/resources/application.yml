@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: flowengine
+  # H2 em memória para desenvolvimento local
+  datasource:
+    url: jdbc:h2:mem:flowenginedb
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+
+server:
+  port: 8080
+
+# Actuator: expõe /actuator/health para o healthcheck do Docker
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: always
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  level:
+    com.serasa.flowengine: DEBUG
+
+---
+# Perfil ativo quando SPRING_PROFILES_ACTIVE=docker (definido no docker-compose.yml)
+spring:
+  config:
+    activate:
+      on-profile: docker
+
+logging:
+  level:
+    com.serasa.flowengine: INFO

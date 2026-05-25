@@ -1,0 +1,24 @@
+# Pasta de build local — o build acontece DENTRO do container, não precisa enviar
+target/
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# Git
+.git/
+.gitignore
+
+# Docker (não precisa enviar os próprios arquivos Docker)
+.dockerignore
+
+# CI
+.github/
+
+# Arquivos de ambiente local (nunca enviar para a imagem)
+.env
+.env.*
+
+# Logs
+*.log

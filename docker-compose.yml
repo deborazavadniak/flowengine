@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+
+  app:
+    # "build: ." significa: use o Dockerfile que está nesta mesma pasta
+    build: .
+    container_name: flow-engine
+
+    # Mapeia a porta: "porta-do-seu-computador:porta-dentro-do-container"
+    # Após subir, acesse http://localhost:8080
+    ports:
+      - "8080:8080"
+
+    # Variáveis de ambiente injetadas no container
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SERVER_PORT=8080
+
+    # Healthcheck: o Docker testa este comando a cada 15s.
+    # Enquanto retornar erro, o container fica com status "starting".
+    # Quando retornar sucesso, fica "healthy".
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+
+    # Reinicia automaticamente se o container cair por algum erro
+    restart: unless-stopped
