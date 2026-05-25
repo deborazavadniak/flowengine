@@ -9,6 +9,11 @@ on:
       - main
       - develop
 
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
 jobs:
   build-and-test:
     name: Build and Test Java 21
@@ -32,7 +37,7 @@ jobs:
         run: mvn test
 
       - name: Publicar relatorio de testes
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v2
         if: always()
         with:
           name: Resultados dos Testes
