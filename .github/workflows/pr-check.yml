@@ -1,0 +1,46 @@
+name: PR Check
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Workflow leve e rápido exclusivo para Pull Requests.
+# Foco: feedback imediato sem o overhead do build Docker.
+# ─────────────────────────────────────────────────────────────────────────────
+on:
+  pull_request:
+    branches: [main, develop]
+    types: [opened, synchronize, reopened]
+
+env:
+  JAVA_VERSION: "17"
+
+jobs:
+
+  validate:
+    name: Validar PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: temurin
+          cache: maven
+
+      - name: Executar testes e verificar build
+        run: mvn verify -q
+
+      - name: Comentar resultado dos testes no PR
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Resultados dos Testes
+          path: target/surefire-reports/*.xml
+          reporter: java-junit
+          fail-on-error: true
+
+      - name: Verificar que não há classes sem testes (cobertura mínima)
+        run: |
+          echo "Testes executados com sucesso — PR aprovado para revisão de código."

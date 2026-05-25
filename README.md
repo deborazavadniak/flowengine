@@ -2,6 +2,9 @@
 
 [![CI Pipeline](https://github.com/deborazavadniak/flowengine/actions/workflows/ci.yml/badge.svg)](https://github.com/deborazavadniak/flowengine/actions/workflows/ci.yml)
 
+🚀 **Deploy:** https://flowengine-production.up.railway.app  
+📖 **Swagger:** https://flowengine-production.up.railway.app/swagger-ui.html
+
 Engine de execução de fluxos dinâmicos baseados em blocos — desafio técnico para desenvolvedor pleno.
 
 ---
