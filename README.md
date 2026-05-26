@@ -2,8 +2,10 @@
 
 [![CI Pipeline](https://github.com/deborazavadniak/flowengine/actions/workflows/ci.yml/badge.svg)](https://github.com/deborazavadniak/flowengine/actions/workflows/ci.yml)
 
-🚀 **Deploy:** https://flowengine-production.up.railway.app  
+🚀 **Deploy:** https://flowengine-production.up.railway.app/actuator/health  
 📖 **Swagger:** https://flowengine-production.up.railway.app/swagger-ui.html
+
+> **Nota:** a aplicação está hospedada no plano gratuito do Railway. Se o primeiro acesso demorar, aguarde ~30 segundos para a aplicação inicializar.
 
 Engine de execução de fluxos dinâmicos baseados em blocos — desafio técnico para desenvolvedor pleno.
 
@@ -144,6 +146,24 @@ A aplicação estará disponível em:
 - API: `http://localhost:8080`
 - Swagger UI: `http://localhost:8080/swagger-ui.html`
 - Health check: `http://localhost:8080/actuator/health`
+
+---
+
+## Testando em nuvem
+
+A aplicação está disponível publicamente no Railway — não é necessário rodar nada localmente para testar.
+
+**Pelo Swagger (sem instalar nada):**
+Acesse https://flowengine-production.up.railway.app/swagger-ui.html, expanda qualquer endpoint e clique em **Try it out**.
+
+**Pelo Postman ou curl:**
+Substitua `http://localhost:8080` pela URL do Railway em qualquer requisição:
+
+```
+POST https://flowengine-production.up.railway.app/api/flows
+POST https://flowengine-production.up.railway.app/api/flows/prime-check/execute
+GET  https://flowengine-production.up.railway.app/api/flows
+```
 
 ---
 
@@ -331,6 +351,7 @@ Resposta:
 | `FlowEngineTest` | Unitário com `@Mock` | Loop de execução, roteamento, histórico de passos, tratamento de erros |
 | `ConditionBlockTest` | Unitário com `@InjectMocks` | Todos os operadores, casos de borda, variável ausente |
 | `MathBlockTest` | Unitário com `@InjectMocks` | Todas as operações aritméticas, divisão por zero |
+| `FlowControllerTest` | Unitário com `@InjectMocks` | Todos os endpoints REST: status HTTP, chamadas ao repositório e à engine |
 | `PrimeFlowIntegrationTest` | Integração com `@Spy` | 20 casos do fluxo primo end-to-end |
 
 ---
