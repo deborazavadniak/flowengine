@@ -1,6 +1,5 @@
 package com.serasa.flowengine.api;
 
-
 import com.serasa.flowengine.api.dto.CreateFlowRequest;
 import com.serasa.flowengine.api.dto.ExecuteFlowRequest;
 import com.serasa.flowengine.api.dto.Responses;
@@ -17,6 +16,11 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 
 import java.util.List;
 
@@ -97,13 +101,25 @@ public class FlowController {
     // ── GET /api/flows ────────────────────────────────────────────────────────
 
     @GetMapping
-    @Operation(summary = "Listar todos os fluxos")
-    public ResponseEntity<List<Responses.CreateFlowResponse>> listFlows() {
-        List<Responses.CreateFlowResponse> flows = flowRepository.findAll().stream()
+    @Operation(
+            summary = "Listar fluxos com paginação",
+            description = "Parâmetros: page (default 0), size (default 10), sort (ex: name,asc)"
+    )
+    public ResponseEntity<Page<Responses.CreateFlowResponse>> listFlows(
+            @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+
+        List<Responses.CreateFlowResponse> all = flowRepository.findAll().stream()
                 .map(f -> new Responses.CreateFlowResponse(
                         f.getId(), f.getName(), f.blockCount(), f.getCreatedAt(), null))
                 .toList();
-        return ResponseEntity.ok(flows);
+
+        // Paginação manual sobre a lista em memória
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), all.size());
+        List<Responses.CreateFlowResponse> pageContent =
+                start > all.size() ? List.of() : all.subList(start, end);
+
+        return ResponseEntity.ok(new PageImpl<>(pageContent, pageable, all.size()));
     }
 
     // ── DELETE /api/flows/{id} ────────────────────────────────────────────────
